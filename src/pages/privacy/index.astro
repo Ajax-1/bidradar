@@ -30,6 +30,11 @@ import { SITE, contactHref } from '../../lib/site';
       <strong>When you email us:</strong> the content of your message and your email address, so we
       can reply.
     </li>
+    <li>
+      <strong>Public business addresses:</strong> company contact addresses that were already
+      published publicly, used for a small number of individual emails. See "Our emails" below for
+      how to opt out.
+    </li>
   </ul>
 
   <h2>What we do not do</h2>
@@ -41,23 +46,33 @@ import { SITE, contactHref } from '../../lib/site';
   <h2>Who processes data for us</h2>
   <p>
     We rely on a small number of service providers: a website host (the site is served as static
-    pages, and the host may keep standard server logs such as IP address and browser type), an email
-    delivery or form service that stores subscriber addresses and sends the digests, and Creem for
-    payments. Each processes data only to provide its service to us.
+    pages, and the host may keep standard server logs such as IP address and browser type),
+    FormSubmit, which emails the sign-up form to us, an email service that stores subscriber
+    addresses and sends the digests, and Creem for payments. Each processes data only to provide
+    its service to us.
   </p>
 
   <h2>Our emails</h2>
   <p>
     Every BidRadar email identifies us as the sender, includes our postal mailing address, and
     contains a clear unsubscribe link. Unsubscribing stops our emails right away, and always within
-    10 business days. We send the digest only to people who asked for it.
+    10 business days.
+  </p>
+  <p>
+    The weekday digest is sent only to people who asked for it. We have also sent a small number of
+    individual emails to company contact addresses that were already published publicly. Those
+    emails were not the digest. Each one included our postal address and an unsubscribe link. If
+    you received one and do not want further email, use the unsubscribe link or write to <a
+      href={contactHref}>{SITE.email}</a
+    >. We add that address to our suppression list so we do not email it again.
   </p>
 
   <h2>How long we keep data</h2>
   <p>
     We keep your sign-up details while you receive our emails. If you unsubscribe and do not
     subscribe, we delete your trades and states within 90 days and keep only your email address on
-    a suppression list so we never email you again by mistake. Payment records are kept as long as
+    a suppression list so we never email you again by mistake. The same list is used when someone
+    opts out of the individual business emails described above. Payment records are kept as long as
     tax and accounting rules require.
   </p>
 

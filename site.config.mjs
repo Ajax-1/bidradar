@@ -38,12 +38,14 @@ export const SITE = {
     standard: '',
   },
 
-  // PLACEHOLDER (email signup form). Paste the POST endpoint from your form
-  // or newsletter service (e.g. Formspree, Buttondown, Tally, Kit).
-  // Field names sent: email, trades, states, source.
-  // While empty, the form opens a pre-filled email to us instead.
+  // Sample signups are delivered by FormSubmit (https://formsubmit.co).
+  // No account and no fee. The endpoint is their AJAX URL for `email` above.
+  // The first submission emails that inbox a one-time "Activate Form" link.
+  // Until it is clicked, FormSubmit holds submissions (about 30 days) instead
+  // of delivering them. Clear `action` to fall back to a mailto: link.
+  // Fields sent: email, trades, states, source.
   signupForm: {
-    action: '',
+    action: 'https://formsubmit.co/ajax/bidradar@mail.grokbot.com',
     // Where to send people after a successful submit (path on this site).
     thanksPath: '/thanks/',
   },
