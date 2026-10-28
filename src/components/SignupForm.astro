@@ -65,9 +65,9 @@ const uid = `f-${source}`;
     <legend>Your trades <span class="muted">(pick any)</span></legend>
     <div class="chips">
       {
-        trades.map((t, i) => (
+        trades.map((t) => (
           <label class="chip">
-            <input type="checkbox" name="trades" value={t} />
+            <input type="checkbox" name={t} value="Yes" data-trade={t} />
             <span>{t}</span>
           </label>
         ))
@@ -136,7 +136,10 @@ const uid = `f-${source}`;
         return;
       }
       const data = new FormData(form);
-      const trades = data.getAll('trades').join(', ') || 'Not specified';
+      const trades =
+        [...form.querySelectorAll<HTMLInputElement>('input[data-trade]:checked')]
+          .map((el) => el.dataset.trade)
+          .join(', ') || 'Not specified';
       const states = String(data.get('states') || '').trim() || 'Not specified';
       const endpoint = form.dataset.endpoint;
       const emailValue = email.value.trim();
@@ -159,7 +162,9 @@ const uid = `f-${source}`;
 
       btn.disabled = true;
       btn.dataset.loading = 'true';
-      status.hidden = true;
+      status.hidden = false;
+      delete status.dataset.tone;
+      status.textContent = 'Sending your request...';
       try {
         const body = form.dataset.formsubmit
           ? JSON.stringify({
