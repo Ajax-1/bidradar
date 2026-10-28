@@ -1,0 +1,175 @@
+---
+import Icon from './Icon.astro';
+import { SITE, checkoutHref, href } from '../lib/site';
+
+const { standard, founding, foundingSeats, foundingOpen, trialDays } = SITE.pricing;
+
+const included = [
+  'A digest every weekday (Monday to Friday)',
+  'New construction and facilities notices from SAM.gov',
+  'Filtered to your trades and states',
+  'Plain-English summary for every opportunity',
+  '1-5 fit score and a suggested way to bid',
+  'Direct link to the original notice',
+  'Change your trades or states any time by email',
+];
+---
+
+<div class={`plans ${foundingOpen ? '' : 'single'}`}>
+  {
+    foundingOpen && (
+      <div class="plan featured">
+        <div class="head">
+          <h3>Founding rate</h3>
+          <p class="note">For our first {foundingSeats} paying customers</p>
+        </div>
+        <p class="price">
+          <span class="mono amt">${founding}</span>
+          <span class="per">/ month</span>
+        </p>
+        <p class="lock">
+          <Icon name="lock-simple" size={16} />
+          Your price stays at ${founding} for as long as you stay subscribed.
+        </p>
+        <a class="btn btn-primary" href={checkoutHref('founding')}>
+          Subscribe
+        </a>
+      </div>
+    )
+  }
+
+  <div class="plan">
+    <div class="head">
+      <h3>Standard</h3>
+      <p class="note">{foundingOpen ? `After the first ${foundingSeats} customers` : 'Everything included'}</p>
+    </div>
+    <p class="price">
+      <span class="mono amt">${standard}</span>
+      <span class="per">/ month</span>
+    </p>
+    <p class="lock">
+      <Icon name="calendar-x" size={16} />
+      Month to month. Cancel any time.
+    </p>
+    <a class={`btn ${foundingOpen ? 'btn-secondary' : 'btn-primary'}`} href={checkoutHref('standard')}>
+      Subscribe
+    </a>
+  </div>
+
+  <div class="included">
+    <h3>Both plans include</h3>
+    <ul>
+      {
+        included.map((i) => (
+          <li>
+            <Icon name="check" size={16} />
+            {i}
+          </li>
+        ))
+      }
+    </ul>
+    <p class="terms">
+      Try it first: <a class="text-link" href={href('/#signup')}>{trialDays} free days</a>, no credit
+      card. Not happy in your first paid month? Email us for a <a
+        class="text-link"
+        href={href('/refund/')}>full refund</a
+      >.
+    </p>
+  </div>
+</div>
+
+<style>
+  .plans {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    max-width: 920px;
+    margin-inline: auto;
+  }
+  .plans.single {
+    grid-template-columns: 1fr;
+    max-width: 560px;
+  }
+  .plan {
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: 1.1rem;
+    padding: 1.75rem;
+    border-radius: var(--r-md);
+    border: 1px solid var(--line);
+    background: var(--surface);
+  }
+  .featured {
+    border-color: var(--accent);
+    box-shadow: var(--shadow);
+  }
+  .note {
+    margin-top: 0.3rem;
+    font-size: 0.875rem;
+    color: var(--ink-3);
+  }
+  .price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+  }
+  .amt {
+    font-size: 3rem;
+    font-weight: 500;
+    letter-spacing: -0.05em;
+    line-height: 1;
+  }
+  .per {
+    color: var(--ink-3);
+  }
+  .lock {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+  .lock :global(.icon) {
+    margin-top: 0.2rem;
+    color: var(--accent-text);
+  }
+  .included {
+    grid-column: 1 / -1;
+    padding: 1.75rem;
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem 2rem;
+    font-size: 0.9375rem;
+    color: var(--ink-2);
+  }
+  li {
+    display: flex;
+    gap: 0.55rem;
+  }
+  li :global(.icon) {
+    margin-top: 0.25rem;
+    color: var(--accent-text);
+  }
+  .terms {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line-strong);
+    font-size: 0.875rem;
+    color: var(--ink-2);
+  }
+  @media (max-width: 640px) {
+    .plans {
+      grid-template-columns: 1fr;
+    }
+    ul {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

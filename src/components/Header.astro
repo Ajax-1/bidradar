@@ -1,0 +1,120 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { href } from '../lib/site';
+
+const links = [
+  { label: 'Sample digest', to: '/sample/' },
+  { label: 'How it works', to: '/#how' },
+  { label: 'Pricing', to: '/pricing/' },
+  { label: 'FAQ', to: '/#faq' },
+];
+---
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a href={href('/')} class="home" aria-label="BidRadar home"><Logo /></a>
+
+    <nav class="links" aria-label="Main">
+      {links.map((l) => <a href={href(l.to)}>{l.label}</a>)}
+    </nav>
+
+    <div class="actions">
+      <a class="btn btn-primary btn-sm" href={href('/#signup')}>Get 3 free days</a>
+      <details class="menu">
+        <summary aria-label="Open menu"><Icon name="list" size={22} /></summary>
+        <nav class="menu-panel" aria-label="Mobile">
+          {links.map((l) => <a href={href(l.to)}>{l.label}</a>)}
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--bg) 86%, transparent);
+    backdrop-filter: saturate(160%) blur(12px);
+    -webkit-backdrop-filter: saturate(160%) blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .bar {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+  .home {
+    text-decoration: none;
+  }
+  .links {
+    display: flex;
+    gap: 1.75rem;
+    margin-right: auto;
+    font-size: 0.9375rem;
+  }
+  .links a {
+    color: var(--ink-2);
+    text-decoration: none;
+    transition: color 0.2s var(--ease);
+  }
+  .links a:hover {
+    color: var(--ink);
+  }
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+  }
+  .menu {
+    display: none;
+    position: relative;
+  }
+  .menu summary {
+    list-style: none;
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--r-sm);
+    border: 1px solid var(--line-strong);
+    cursor: pointer;
+    color: var(--ink);
+  }
+  .menu summary::-webkit-details-marker {
+    display: none;
+  }
+  .menu-panel {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 0.5rem);
+    min-width: 13rem;
+    display: grid;
+    padding: 0.4rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow);
+  }
+  .menu-panel a {
+    padding: 0.65rem 0.75rem;
+    border-radius: var(--r-sm);
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .menu-panel a:hover {
+    background: var(--surface-2);
+  }
+  @media (max-width: 860px) {
+    .links {
+      display: none;
+    }
+    .menu {
+      display: block;
+    }
+  }
+</style>

@@ -1,0 +1,276 @@
+---
+import Icon from './Icon.astro';
+import { SITE, absolute, href } from '../lib/site';
+
+interface Props {
+  source?: string;
+}
+const { source = 'home' } = Astro.props;
+
+const trades = [
+  'General construction',
+  'HVAC / mechanical',
+  'Electrical',
+  'Roofing',
+  'Plumbing',
+  'Painting / finishes',
+  'Site work / paving',
+  'Facilities maintenance',
+  'Design-build / A-E',
+];
+
+const endpoint = SITE.signupForm.action;
+// With no form service yet, fall back to a plain email to us.
+const action = endpoint || `mailto:${SITE.email}?subject=${encodeURIComponent('Free 3-day BidRadar sample')}`;
+const uid = `f-${source}`;
+---
+
+<form
+  class="signup"
+  action={action}
+  method="post"
+  enctype={endpoint ? undefined : 'text/plain'}
+  data-endpoint={endpoint}
+  data-email={SITE.email}
+  data-thanks={href(SITE.signupForm.thanksPath)}
+  novalidate
+>
+  <input type="hidden" name="source" value={source} />
+  <input type="hidden" name="_next" value={absolute(SITE.signupForm.thanksPath)} />
+
+  <div class="field">
+    <label for={`${uid}-email`}>Work email</label>
+    <input
+      id={`${uid}-email`}
+      name="email"
+      type="email"
+      autocomplete="email"
+      required
+      placeholder="you@yourcompany.com"
+      aria-describedby={`${uid}-email-err`}
+    />
+    <p class="err" id={`${uid}-email-err`} role="alert" hidden>Enter a valid email address.</p>
+  </div>
+
+  <fieldset class="field">
+    <legend>Your trades <span class="muted">(pick any)</span></legend>
+    <div class="chips">
+      {
+        trades.map((t, i) => (
+          <label class="chip">
+            <input type="checkbox" name="trades" value={t} />
+            <span>{t}</span>
+          </label>
+        ))
+      }
+    </div>
+  </fieldset>
+
+  <div class="field">
+    <label for={`${uid}-states`}>States you work in</label>
+    <input
+      id={`${uid}-states`}
+      name="states"
+      type="text"
+      autocomplete="off"
+      placeholder="e.g. VA, MD, DC or Nationwide"
+    />
+  </div>
+
+  <button type="submit" class="btn btn-primary submit">
+    Get 3 free days <Icon name="arrow-right" size={16} class="icon-nudge" />
+  </button>
+
+  <p class="fine">
+    No credit card. You will get three weekday digests, then we ask if you want to subscribe. Every
+    email includes our postal address and a one-click unsubscribe link. See our <a
+      class="text-link"
+      href={href('/privacy/')}>Privacy Policy</a
+    >.
+  </p>
+  <p class="status" role="status" hidden></p>
+</form>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('form.signup').forEach((form) => {
+    const email = form.querySelector<HTMLInputElement>('input[name=email]')!;
+    const err = form.querySelector<HTMLElement>('.err')!;
+    const status = form.querySelector<HTMLElement>('.status')!;
+    const btn = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+    const valid = () => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim());
+
+    email.addEventListener('input', () => {
+      if (!err.hidden && valid()) {
+        err.hidden = true;
+        email.removeAttribute('aria-invalid');
+      }
+    });
+
+    form.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      if (!valid()) {
+        err.hidden = false;
+        email.setAttribute('aria-invalid', 'true');
+        email.focus();
+        return;
+      }
+      const data = new FormData(form);
+      const trades = data.getAll('trades').join(', ') || 'Not specified';
+      const states = String(data.get('states') || '').trim() || 'Not specified';
+      const endpoint = form.dataset.endpoint;
+
+      if (!endpoint) {
+        // No form service configured yet: hand off to the visitor's email app.
+        const body = `Please send me the free 3-day BidRadar sample.\n\nEmail: ${email.value.trim()}\nTrades: ${trades}\nStates: ${states}\n`;
+        window.location.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent('Free 3-day BidRadar sample')}&body=${encodeURIComponent(body)}`;
+        status.hidden = false;
+        status.textContent = 'Your email app should open with the request filled in. Just press send.';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.dataset.loading = 'true';
+      status.hidden = true;
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          body: data,
+          headers: { Accept: 'application/json' },
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        window.location.href = form.dataset.thanks!;
+      } catch {
+        status.hidden = false;
+        status.dataset.tone = 'error';
+        status.textContent = `Something went wrong. Please try again, or email ${form.dataset.email}.`;
+        btn.disabled = false;
+        delete btn.dataset.loading;
+      }
+    });
+  });
+</script>
+
+<style>
+  .signup {
+    display: grid;
+    gap: 1.25rem;
+  }
+  .field {
+    display: grid;
+    gap: 0.45rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+  label,
+  legend {
+    font-size: 0.875rem;
+    font-weight: 560;
+    color: var(--ink);
+    padding: 0;
+  }
+  legend {
+    margin-bottom: 0.45rem;
+  }
+  legend .muted {
+    font-weight: 400;
+  }
+  input[type='email'],
+  input[type='text'] {
+    height: 2.875rem;
+    padding: 0 0.85rem;
+    border-radius: var(--r-sm);
+    border: 1px solid var(--line-strong);
+    background: var(--bg);
+    color: var(--ink);
+    font: inherit;
+    font-size: 1rem;
+    transition:
+      border-color 0.2s var(--ease),
+      box-shadow 0.2s var(--ease);
+  }
+  input::placeholder {
+    color: var(--ink-3);
+  }
+  input[type='email']:focus,
+  input[type='text']:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+  }
+  input[aria-invalid='true'] {
+    border-color: #c62828;
+  }
+  .err {
+    font-size: 0.8125rem;
+    color: #b42318;
+  }
+  @media (prefers-color-scheme: dark) {
+    .err {
+      color: #ff8a80;
+    }
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+  .chip {
+    position: relative;
+    font-weight: 450;
+    cursor: pointer;
+  }
+  .chip input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    cursor: pointer;
+  }
+  .chip span {
+    display: inline-block;
+    padding: 0.4rem 0.75rem;
+    border-radius: var(--r-sm);
+    border: 1px solid var(--line-strong);
+    font-size: 0.8125rem;
+    color: var(--ink-2);
+    background: var(--bg);
+    transition: all 0.15s var(--ease);
+  }
+  .chip:hover span {
+    border-color: var(--ink-3);
+  }
+  .chip input:checked + span {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent-text);
+  }
+  .chip input:focus-visible + span {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .submit {
+    width: 100%;
+    height: 3rem;
+    font-size: 1rem;
+  }
+  .submit[data-loading] {
+    opacity: 0.7;
+    cursor: progress;
+  }
+  .fine {
+    font-size: 0.8125rem;
+    color: var(--ink-3);
+    line-height: 1.55;
+  }
+  .status {
+    font-size: 0.875rem;
+    padding: 0.75rem 0.9rem;
+    border-radius: var(--r-sm);
+    background: var(--surface-2);
+    color: var(--ink);
+  }
+  .status[data-tone='error'] {
+    background: color-mix(in srgb, #c62828 12%, var(--surface));
+  }
+</style>

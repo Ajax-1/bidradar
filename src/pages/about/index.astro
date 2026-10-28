@@ -1,0 +1,52 @@
+---
+import Page from '../../layouts/Page.astro';
+import { SITE, contactHref, href } from '../../lib/site';
+---
+
+<Page
+  title="About and contact"
+  description="BidRadar is an independent, one-person service that turns new federal construction and facilities notices into a short daily digest for small contractors. Contact and mailing address."
+  path="/about/"
+  heading="About BidRadar"
+  intro="BidRadar is a small, independent service that helps small construction and facilities contractors find federal work worth bidding on, without spending their mornings in search results."
+>
+  <h2>What we do</h2>
+  <p>
+    Every weekday we go through newly posted federal construction and facilities opportunities on
+    SAM.gov, with a focus on small-business set-asides. For each one we write a short summary, give
+    it a 1-5 fit score and suggest a way to approach the bid. Then we filter the list by each
+    subscriber's trades and states and send it by email.
+  </p>
+
+  <h2>Who runs it</h2>
+  <p>
+    BidRadar is a one-person business. There is no sales team and no call center. The person who
+    builds the digests is the person who answers your email.
+  </p>
+
+  <h2>Independence</h2>
+  <p>
+    <strong>BidRadar is not affiliated with SAM.gov, the General Services Administration, or any
+    U.S. government agency.</strong> We are not a government contractor portal, we do not submit
+    bids on your behalf, and we cannot influence any award. The notices we summarize are public. Our
+    summaries, scores and suggestions are our own opinion; always check the original solicitation
+    before you bid.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Email: <a href={contactHref}>{SITE.email}</a>
+  </p>
+  <p>
+    Mailing address:<br />
+    {SITE.address.line1}<br />
+    {SITE.address.line2}<br />
+    {SITE.address.line3}<br />
+    {SITE.address.country}
+  </p>
+  <p>
+    Looking for policies? Read our <a href={href('/terms/')}>Terms of Service</a>, <a
+      href={href('/privacy/')}>Privacy Policy</a
+    > and <a href={href('/refund/')}>Refund Policy</a>.
+  </p>
+</Page>

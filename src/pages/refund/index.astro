@@ -1,0 +1,45 @@
+---
+import Page from '../../layouts/Page.astro';
+import { SITE, contactHref } from '../../lib/site';
+---
+
+<Page
+  title="Refund Policy"
+  description="BidRadar refunds your first paid month in full if you are not satisfied. Cancel any time."
+  path="/refund/"
+  heading="Refund Policy"
+  intro="Short version: if BidRadar is not worth it to you in your first paid month, we give that month back."
+  updated="October 28, 2026"
+>
+  <h2>First-month guarantee</h2>
+  <p>
+    If you are not satisfied during your first paid month, email <a href={contactHref}
+      >{SITE.email}</a
+    > before that month ends and ask for a refund. We refund the full amount of that first month. You
+    do not need to give a reason.
+  </p>
+
+  <h2>How refunds are paid</h2>
+  <p>
+    Refunds go back to the original payment method through our payment provider, Creem. We start
+    the refund within 5 business days of your request. Your bank or card issuer may take a few more
+    days to show it.
+  </p>
+
+  <h2>After the first month</h2>
+  <p>
+    You can cancel at any time and you will not be billed again. Months after the first one are not
+    refunded for partial use, and your digest keeps arriving until the end of the period you paid
+    for. If something went wrong on our side, such as digests not arriving, write to us and we will
+    make it right.
+  </p>
+
+  <h2>Free sample</h2>
+  <p>The {SITE.pricing.trialDays}-day sample is free and needs no payment details, so there is nothing to refund.</p>
+
+  <h2>Contact</h2>
+  <p>
+    <a href={contactHref}>{SITE.email}</a><br />
+    {SITE.address.line1}, {SITE.address.line2}, {SITE.address.line3}, {SITE.address.country}
+  </p>
+</Page>

@@ -1,0 +1,150 @@
+---
+import Icon from './Icon.astro';
+import { sample, setAsideLabel, shortDate } from '../data/sample';
+
+// Hero visual: what the digest email looks like, using real notices.
+const items = [sample[3], sample[1], sample[0]];
+---
+
+<figure class="digest">
+  <div class="chrome">
+    <div class="row">
+      <span class="k">From</span><span>BidRadar</span>
+    </div>
+    <div class="row">
+      <span class="k">Subject</span><span class="subj">3 new federal construction bids that fit your profile</span>
+    </div>
+  </div>
+
+  <ol class="items">
+    {
+      items.map((it, i) => (
+        <li style={`--d:${i}`}>
+          <div class="top">
+            <span class="score mono" aria-label={`Fit score ${it.score} out of 5`}>
+              {it.score}<span>/5</span>
+            </span>
+            <div class="t">
+              <p class="title">{it.summary.split('. ')[0].replace(/\.$/, '')}</p>
+              <p class="meta mono">
+                {setAsideLabel[it.setAside]} <span aria-hidden="true">/</span> Due {shortDate(it.due)}
+              </p>
+            </div>
+          </div>
+          <p class="advice">
+            <Icon name="lightbulb" size={15} />
+            <span>{it.advice}</span>
+          </p>
+        </li>
+      ))
+    }
+  </ol>
+
+  <figcaption>
+    Sample digest built from real SAM.gov notices posted Oct 26-27, 2026.
+  </figcaption>
+</figure>
+
+<style>
+  .digest {
+    margin: 0;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .chrome {
+    padding: 0.9rem 1.25rem;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface-2);
+    display: grid;
+    gap: 0.2rem;
+    font-size: 0.8125rem;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 4.25rem 1fr;
+    gap: 0.5rem;
+    color: var(--ink-2);
+  }
+  .k {
+    color: var(--ink-3);
+  }
+  .subj {
+    color: var(--ink);
+    font-weight: 560;
+  }
+  .items {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 1.25rem;
+  }
+  .items li {
+    padding-block: 1rem;
+  }
+  .items li + li {
+    border-top: 1px solid var(--line);
+  }
+  .top {
+    display: grid;
+    grid-template-columns: 2.75rem 1fr;
+    gap: 0.75rem;
+  }
+  .score {
+    font-size: 1.5rem;
+    line-height: 1.1;
+    color: var(--accent-text);
+    font-weight: 500;
+  }
+  .score span {
+    font-size: 0.75rem;
+    color: var(--ink-3);
+  }
+  .title {
+    font-weight: 580;
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+  }
+  .meta {
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    color: var(--ink-3);
+  }
+  .advice {
+    display: flex;
+    gap: 0.45rem;
+    margin: 0.6rem 0 0 3.5rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+  .advice :global(.icon) {
+    margin-top: 0.15rem;
+    color: var(--accent-text);
+  }
+  figcaption {
+    padding: 0.75rem 1.25rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.75rem;
+    color: var(--ink-3);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .items li {
+      animation: rise 0.8s var(--ease) both;
+      animation-delay: calc(250ms + var(--d) * 140ms);
+    }
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+    }
+  }
+  @media (max-width: 480px) {
+    .advice {
+      margin-left: 0;
+    }
+  }
+</style>

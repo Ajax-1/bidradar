@@ -1,0 +1,784 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import DigestPreview from '../components/DigestPreview.astro';
+import OpportunityCard from '../components/OpportunityCard.astro';
+import Pricing from '../components/Pricing.astro';
+import SignupForm from '../components/SignupForm.astro';
+import { sample, windowStats } from '../data/sample';
+import { faq } from '../data/faq';
+import { SITE, href, absolute, contactHref } from '../lib/site';
+
+const { standard, founding, trialDays } = SITE.pricing;
+
+const steps = [
+  {
+    icon: 'hard-hat',
+    title: 'Tell us what you build',
+    body: 'Pick your trades and the states you work in. That is the whole setup.',
+  },
+  {
+    icon: 'magnifying-glass',
+    title: 'We read every new notice',
+    body: 'Each weekday we go through the new federal construction and facilities postings and keep the ones that fit you.',
+  },
+  {
+    icon: 'envelope-simple-open',
+    title: 'You get a short list',
+    body: 'One email with a summary, a 1-5 fit score and a suggested way to bid for each, plus the link to the original.',
+  },
+];
+
+const compare = [
+  { label: 'New federal construction notices', us: true, sam: true },
+  { label: 'Filtered to your trades and states', us: true, sam: 'Partly, by saved search' },
+  { label: 'Plain-English summary', us: true, sam: false },
+  { label: '1-5 fit score', us: true, sam: false },
+  { label: 'Suggested way to bid (prime, team, sub)', us: true, sam: false },
+  { label: 'Link to the original notice', us: true, sam: true },
+];
+
+const others = [
+  { name: 'ConstructConnect', price: 'about $129 / month' },
+  { name: 'PlanHub', price: '$1,999-3,299 / year' },
+  { name: 'GovScout', price: '$29-199 / month' },
+  { name: 'HigherGov', price: '$500 / year' },
+];
+
+const featured = sample[2];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'BidRadar daily digest',
+    serviceType: 'Federal contract opportunity email digest',
+    provider: { '@type': 'Organization', name: SITE.name, url: absolute('/') },
+    areaServed: { '@type': 'Country', name: 'United States' },
+    audience: { '@type': 'BusinessAudience', name: 'Small federal construction and facilities contractors' },
+    description:
+      'Every weekday, new federal construction and facilities opportunities from SAM.gov, filtered by trade and state, each with a summary, a 1-5 fit score and bid advice.',
+    offers: [
+      {
+        '@type': 'Offer',
+        name: 'Founding rate (first 10 customers)',
+        price: String(founding),
+        priceCurrency: 'USD',
+        url: absolute('/pricing/'),
+      },
+      {
+        '@type': 'Offer',
+        name: 'Standard',
+        price: String(standard),
+        priceCurrency: 'USD',
+        url: absolute('/pricing/'),
+      },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+---
+
+<Base
+  title="BidRadar: federal construction bids, summarized and scored daily"
+  description="Every weekday, new SAM.gov construction and facilities set-asides filtered to your trade and state, each with a plain-English summary, a 1-5 fit score and bid advice. $19/month, 3 free days."
+  path="/"
+  jsonLd={jsonLd}
+>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <h1>Federal construction bids, read and ranked for you.</h1>
+        <p class="lede hero-sub">
+          Each weekday: new SAM.gov construction set-asides, summarized, scored 1-5 and filtered to
+          your trade and state.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href={href('/#signup')}>
+            Get 3 free days <Icon name="arrow-right" size={16} class="icon-nudge" />
+          </a>
+          <a class="btn btn-secondary" href={href('/sample/')}>See the sample</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <DigestPreview />
+      </div>
+    </div>
+  </section>
+
+  <!-- Real numbers -->
+  <section class="stats">
+    <div class="wrap stats-grid">
+      <div class="stat" data-reveal>
+        <span class="mono big">{windowStats.total}</span>
+        <p>
+          new federal construction and facilities opportunities were posted on SAM.gov from {
+            windowStats.from
+          } to {windowStats.to}.
+        </p>
+      </div>
+      <div class="stat" data-reveal style="--i:1">
+        <span class="mono big accent">{windowStats.smallBusiness}</span>
+        <p>of them were set aside for small businesses.</p>
+      </div>
+      <p class="stats-note" data-reveal style="--i:2">
+        Reading every one of those notices is a job in itself. BidRadar reads them all and sends you
+        only the ones that fit your work.
+      </p>
+    </div>
+  </section>
+
+  <!-- Anatomy of one item -->
+  <section class="section anatomy">
+    <div class="wrap anatomy-grid">
+      <div class="anatomy-copy">
+        <p class="eyebrow">What you get for each opportunity</p>
+        <h2>Decide in thirty seconds whether it is worth a look.</h2>
+        <ul class="parts">
+          <li>
+            <Icon name="target" size={20} />
+            <div>
+              <h3>Fit score, 1 to 5</h3>
+              <p>How well it matches your trades and states. Start with the 5s.</p>
+            </div>
+          </li>
+          <li>
+            <Icon name="file-text" size={20} />
+            <div>
+              <h3>Our own summary</h3>
+              <p>What the job is, who is buying, the set-aside and the deadline.</p>
+            </div>
+          </li>
+          <li>
+            <Icon name="lightbulb" size={20} />
+            <div>
+              <h3>How to approach it</h3>
+              <p>Bid as prime, team up, or find a prime to sub under.</p>
+            </div>
+          </li>
+          <li>
+            <Icon name="link-simple" size={20} />
+            <div>
+              <h3>The original notice</h3>
+              <p>One click to the full solicitation on SAM.gov.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="anatomy-card">
+        <OpportunityCard item={featured} />
+        <p class="muted small">A real opportunity from the Oct 26, 2026 postings, as it appears in a digest.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="section how" id="how">
+    <div class="wrap">
+      <h2 class="center-h">Set up once. Read one email a day.</h2>
+      <ol class="steps">
+        {
+          steps.map((s, i) => (
+            <li data-reveal style={`--i:${i}`}>
+              <span class="step-icon">
+                <Icon name={s.icon} size={22} />
+              </span>
+              <h3>{s.title}</h3>
+              <p>{s.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Comparison -->
+  <section class="section compare">
+    <div class="wrap">
+      <h2 class="compare-h">More than an alert. Less than a bid platform bill.</h2>
+      <div class="compare-grid">
+      <div class="compare-main">
+        <div class="table-wrap" data-reveal>
+          <table>
+            <thead>
+              <tr>
+                <th scope="col"><span class="sr-only">Feature</span></th>
+                <th scope="col">BidRadar</th>
+                <th scope="col">SAM.gov free alerts</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                compare.map((r) => (
+                  <tr>
+                    <th scope="row">{r.label}</th>
+                    <td class="yes">
+                      <Icon name="check" size={18} />
+                      <span class="sr-only">Yes</span>
+                    </td>
+                    <td class={r.sam === true ? 'yes' : r.sam ? 'partial' : 'no'}>
+                      {r.sam === true ? (
+                        <>
+                          <Icon name="check" size={18} />
+                          <span class="sr-only">Yes</span>
+                        </>
+                      ) : r.sam ? (
+                        <span>{r.sam}</span>
+                      ) : (
+                        <>
+                          <Icon name="minus" size={18} />
+                          <span class="sr-only">No</span>
+                        </>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              }
+              <tr class="price-row">
+                <th scope="row">Price</th>
+                <td class="mono">${standard}/mo</td>
+                <td class="mono">Free</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <aside class="others" data-reveal style="--i:1">
+        <h3>For reference: broader bid platforms</h3>
+        <p class="muted small">
+          These tools do much more than BidRadar (plan rooms, project databases, CRM). If you just
+          need a daily shortlist, you may not need them.
+        </p>
+        <dl>
+          {
+            others.map((o) => (
+              <div>
+                <dt>{o.name}</dt>
+                <dd class="mono">{o.price}</dd>
+              </div>
+            ))
+          }
+        </dl>
+        <p class="muted tiny">
+          Approximate list prices from public sources, October 2026. Check each vendor for current
+          pricing. Names are trademarks of their owners.
+        </p>
+      </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="section pricing" id="pricing">
+    <div class="wrap">
+      <h2 class="center-h">Simple pricing.</h2>
+      <p class="lede center-p">
+        Start with {trialDays} free days. Subscribe if it saves you time. Cancel whenever you like.
+      </p>
+      <Pricing />
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section faq" id="faq">
+    <div class="wrap faq-grid">
+      <div class="faq-side">
+        <h2>Questions, answered plainly.</h2>
+        <p class="muted">
+          Something else? Email <a class="text-link" href={contactHref}>{SITE.email}</a>.
+        </p>
+      </div>
+      <div class="faq-list">
+        {
+          faq.map((f, i) => (
+            <details open={i === 0}>
+              <summary>
+                <span>{f.q}</span>
+                <Icon name="plus" size={18} class="pm" />
+              </summary>
+              <p>{f.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Signup -->
+  <section class="section signup-sec" id="signup">
+    <div class="wrap signup-grid">
+      <div class="signup-copy">
+        <p class="eyebrow">Free sample</p>
+        <h2>See three days of your digest, free.</h2>
+        <p class="lede">
+          Tell us your trades and states. You will get three weekday digests scored for your work.
+          No card, no call.
+        </p>
+        <ul class="assure">
+          <li><Icon name="credit-card" size={18} />No credit card needed</li>
+          <li><Icon name="envelope-simple" size={18} />Unsubscribe from any email, in one click</li>
+          <li><Icon name="shield-check" size={18} />We never sell or share your email</li>
+        </ul>
+      </div>
+      <div class="signup-panel">
+        <SignupForm source="home" />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .small {
+    font-size: 0.875rem;
+  }
+  .tiny {
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+
+  /* Hero */
+  .hero {
+    padding-block: clamp(2.5rem, 6vw, 5rem) clamp(3rem, 6vw, 5rem);
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: center;
+  }
+  h1 {
+    font-size: clamp(2.3rem, 1.5rem + 2.6vw, 3.5rem);
+    letter-spacing: -0.045em;
+    line-height: 1.02;
+    font-weight: 650;
+  }
+  .hero-sub {
+    margin-top: 1.5rem;
+    font-size: 1.1875rem;
+    max-width: 40ch;
+  }
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+  .cta-row .btn {
+    height: 3rem;
+    padding-inline: 1.35rem;
+    font-size: 1rem;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-copy > * {
+      animation: enter 0.9s var(--ease) both;
+    }
+    .hero-copy > :nth-child(2) {
+      animation-delay: 80ms;
+    }
+    .hero-copy > :nth-child(3) {
+      animation-delay: 160ms;
+    }
+    .hero-visual {
+      animation: enter 1s var(--ease) 120ms both;
+    }
+    @keyframes enter {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+    }
+  }
+
+  /* Stats */
+  .stats {
+    border-block: 1px solid var(--line);
+    background: var(--surface);
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.1fr;
+    gap: 2.5rem;
+    padding-block: clamp(2.5rem, 5vw, 3.75rem);
+    align-items: end;
+  }
+  .stat {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .big {
+    font-size: clamp(3.5rem, 2rem + 5vw, 6rem);
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+    font-weight: 450;
+  }
+  .accent {
+    color: var(--accent-text);
+  }
+  .stat p {
+    color: var(--ink-2);
+    max-width: 30ch;
+  }
+  .stats-note {
+    color: var(--ink);
+    font-size: 1.0625rem;
+    font-weight: 500;
+    max-width: 36ch;
+    padding-left: 1.5rem;
+    border-left: 2px solid var(--accent);
+  }
+
+  /* Anatomy */
+  .anatomy-grid {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+  .anatomy-copy h2 {
+    margin-top: 0.85rem;
+    max-width: 16ch;
+  }
+  .parts {
+    list-style: none;
+    padding: 0;
+    margin: 2.25rem 0 0;
+    display: grid;
+    gap: 1.5rem;
+  }
+  .parts li {
+    display: grid;
+    grid-template-columns: 2.25rem 1fr;
+    gap: 0.75rem;
+  }
+  .parts li > :global(.icon) {
+    color: var(--accent-text);
+    margin-top: 0.1rem;
+  }
+  .parts h3 {
+    font-size: 1rem;
+  }
+  .parts p {
+    margin-top: 0.2rem;
+    color: var(--ink-2);
+    font-size: 0.9375rem;
+  }
+  .anatomy-card {
+    position: sticky;
+    top: 6rem;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .anatomy-card :global(.opp) {
+    box-shadow: var(--shadow);
+  }
+
+  /* How */
+  .how {
+    background: var(--surface-2);
+  }
+  .center-h {
+    text-align: center;
+  }
+  .center-p {
+    text-align: center;
+    margin: 1rem auto 0;
+  }
+  .steps {
+    list-style: none;
+    padding: 0;
+    margin: 3.5rem 0 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+    position: relative;
+  }
+  .steps::before {
+    content: '';
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    right: calc(33.33% - 1.5rem);
+    height: 1px;
+    background: var(--line-strong);
+  }
+  .steps li {
+    position: relative;
+  }
+  .step-icon {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--r-md);
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    color: var(--accent-text);
+    position: relative;
+  }
+  .steps h3 {
+    margin-top: 1.25rem;
+  }
+  .steps p {
+    margin-top: 0.5rem;
+    color: var(--ink-2);
+    max-width: 32ch;
+  }
+
+  /* Compare */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+  .compare-h {
+    max-width: 22ch;
+    margin-bottom: 2.5rem;
+  }
+  .table-wrap {
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    background: var(--surface);
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+  th,
+  td {
+    padding: 0.9rem 1.1rem;
+    text-align: left;
+  }
+  thead th {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--ink-2);
+    background: var(--surface-2);
+  }
+  thead th:nth-child(2) {
+    color: var(--accent-text);
+  }
+  tbody th {
+    font-weight: 450;
+    color: var(--ink);
+  }
+  tbody tr + tr > * {
+    border-top: 1px solid var(--line);
+  }
+  td {
+    width: 26%;
+  }
+  td.yes {
+    color: var(--accent-text);
+  }
+  td.no {
+    color: var(--ink-3);
+  }
+  td.partial {
+    font-size: 0.8125rem;
+    color: var(--ink-2);
+  }
+  .price-row > * {
+    font-weight: 600;
+  }
+  .others {
+    padding: 1.75rem;
+    border-radius: var(--r-md);
+    border: 1px solid var(--line);
+    display: grid;
+    gap: 1rem;
+  }
+  .others dl {
+    margin: 0.25rem 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .others dl div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .others dt {
+    font-weight: 550;
+  }
+  .others dd {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 0.875rem;
+  }
+
+  /* Pricing */
+  .pricing :global(.plans) {
+    margin-top: 3rem;
+  }
+
+  /* FAQ */
+  .faq {
+    border-top: 1px solid var(--line);
+  }
+  .faq-grid {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: start;
+  }
+  .faq-side {
+    position: sticky;
+    top: 6rem;
+    display: grid;
+    gap: 1rem;
+  }
+  .faq-side h2 {
+    max-width: 14ch;
+  }
+  .faq-list details {
+    border-bottom: 1px solid var(--line);
+  }
+  .faq-list details:first-child {
+    border-top: 1px solid var(--line);
+  }
+  summary {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.2rem 0;
+    cursor: pointer;
+    font-weight: 560;
+    font-size: 1.0625rem;
+    letter-spacing: -0.01em;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary :global(.pm) {
+    margin-top: 0.2rem;
+    color: var(--ink-3);
+    transition: transform 0.25s var(--ease);
+  }
+  details[open] summary :global(.pm) {
+    transform: rotate(45deg);
+    color: var(--accent-text);
+  }
+  details p {
+    padding: 0 2.5rem 1.4rem 0;
+    color: var(--ink-2);
+    max-width: 68ch;
+  }
+
+  /* Signup */
+  .signup-sec {
+    background: var(--surface);
+    border-top: 1px solid var(--line);
+  }
+  .signup-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: start;
+  }
+  .signup-copy h2 {
+    margin-top: 0.85rem;
+    max-width: 16ch;
+  }
+  .signup-copy .lede {
+    margin-top: 1.25rem;
+  }
+  .assure {
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0 0;
+    display: grid;
+    gap: 0.75rem;
+    color: var(--ink-2);
+  }
+  .assure li {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+  }
+  .assure :global(.icon) {
+    color: var(--accent-text);
+  }
+  .signup-panel {
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border-radius: var(--r-md);
+    border: 1px solid var(--line);
+    background: var(--bg);
+    box-shadow: var(--shadow);
+  }
+
+  @media (max-width: 960px) {
+    .hero-grid,
+    .anatomy-grid,
+    .compare-grid,
+    .faq-grid,
+    .signup-grid {
+      grid-template-columns: 1fr;
+    }
+    .stats-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .stats-note {
+      grid-column: 1 / -1;
+    }
+    .anatomy-card,
+    .faq-side {
+      position: static;
+    }
+    .hero-sub {
+      max-width: 46ch;
+    }
+  }
+  @media (max-width: 720px) {
+    .steps {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .steps::before {
+      top: 1.5rem;
+      bottom: 1.5rem;
+      left: 1.5rem;
+      right: auto;
+      width: 1px;
+      height: auto;
+    }
+    .steps li {
+      padding-left: 4.25rem;
+    }
+    .step-icon {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    .steps h3 {
+      margin-top: 0.6rem;
+    }
+  }
+  @media (max-width: 560px) {
+    .stats-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .cta-row .btn {
+      flex: 1 1 auto;
+    }
+    td,
+    th {
+      padding: 0.75rem 0.8rem;
+    }
+  }
+</style>

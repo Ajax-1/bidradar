@@ -1,0 +1,102 @@
+---
+import Base from '../../layouts/Base.astro';
+import OpportunityCard from '../../components/OpportunityCard.astro';
+import Icon from '../../components/Icon.astro';
+import { sample, windowStats } from '../../data/sample';
+import { href } from '../../lib/site';
+
+const sorted = [...sample].sort((a, b) => b.score - a.score || a.due.localeCompare(b.due));
+---
+
+<Base
+  title="Sample digest"
+  description="A real BidRadar sample: eight federal construction and facilities opportunities posted on SAM.gov Oct 24-27, 2026, each with our summary, a 1-5 fit score and bid advice."
+  path="/sample/"
+>
+  <div class="wrap page">
+    <header class="head">
+      <div>
+        <h1>A real digest, from real notices.</h1>
+        <p class="lede">
+          These eight opportunities were posted on SAM.gov between {windowStats.from} and {
+            windowStats.to
+          }. Your digest looks like this, filtered to your own trades and states.
+        </p>
+      </div>
+      <a class="btn btn-primary" href={href('/#signup')}>
+        Get 3 free days <Icon name="arrow-right" size={16} class="icon-nudge" />
+      </a>
+    </header>
+
+    <div class="note">
+      <Icon name="info" size={18} />
+      <p>
+        Titles, agencies, dates and links come from each public notice. Summaries, scores and bid
+        advice are written by BidRadar. We do not reproduce notice text, so always read the original
+        solicitation before bidding.
+      </p>
+    </div>
+
+    <div class="list">
+      {sorted.map((item) => <OpportunityCard item={item} />)}
+    </div>
+
+    <div class="end">
+      <h2>Want this for your trade, every weekday?</h2>
+      <a class="btn btn-primary" href={href('/#signup')}>
+        Get 3 free days <Icon name="arrow-right" size={16} class="icon-nudge" />
+      </a>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .page {
+    padding-block: clamp(3rem, 6vw, 5rem) clamp(4rem, 8vw, 6rem);
+  }
+  .head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .head > div {
+    max-width: 44rem;
+    display: grid;
+    gap: 1rem;
+  }
+  h1 {
+    font-size: clamp(2.2rem, 1.5rem + 2.5vw, 3.25rem);
+    letter-spacing: -0.04em;
+  }
+  .note {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 2.5rem;
+    padding: 1rem 1.25rem;
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+    color: var(--ink-2);
+    font-size: 0.875rem;
+  }
+  .note :global(.icon) {
+    margin-top: 0.1rem;
+    color: var(--ink-3);
+  }
+  .list {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  .end {
+    margin-top: 4rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+</style>

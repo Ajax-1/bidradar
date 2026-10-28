@@ -1,0 +1,122 @@
+---
+import Page from '../../layouts/Page.astro';
+import { SITE, contactHref, href } from '../../lib/site';
+const { standard, founding, foundingSeats, trialDays } = SITE.pricing;
+---
+
+<Page
+  title="Terms of Service"
+  description="The terms that apply when you use the BidRadar website, free sample and paid email digest."
+  path="/terms/"
+  heading="Terms of Service"
+  updated="October 28, 2026"
+>
+  <p>
+    These terms apply to the BidRadar website, the free sample and the paid subscription
+    (together, the "Service"). By signing up for the sample or subscribing, you agree to them. If
+    you do not agree, please do not use the Service.
+  </p>
+
+  <h2>1. What the Service is</h2>
+  <p>
+    BidRadar sends an email digest, on U.S. business days, of newly posted federal construction and
+    facilities contract opportunities. Each item includes the notice title, agency, dates, a link to
+    the original public notice, and BidRadar's own summary, 1-5 fit score and bid suggestion. The
+    digest is filtered by the trades and states you tell us.
+  </p>
+
+  <h2>2. Independence from the government</h2>
+  <p>
+    BidRadar is an independent private service. It is not affiliated with, endorsed by, or operated
+    by SAM.gov, the General Services Administration, or any U.S. government agency. Opportunity
+    information comes from public notices. The original notice on SAM.gov, including any
+    amendments, is the only authoritative source.
+  </p>
+
+  <h2>3. Information only, no guarantees</h2>
+  <p>
+    Summaries, scores and suggestions are opinions to help you sort opportunities. They may be
+    incomplete or contain mistakes, and notices can change after we write about them. We do not
+    guarantee that the digest includes every relevant opportunity, that any information is
+    accurate or current, or that you will win any contract. You are responsible for reading the
+    full solicitation, confirming your eligibility, and every decision you make about bidding.
+    BidRadar does not provide legal, financial or procurement advice.
+  </p>
+
+  <h2>4. Free sample</h2>
+  <p>
+    The free sample is {trialDays} weekday digests. No payment details are required. After the
+    sample we may send one email asking whether you want to subscribe. You can unsubscribe at any
+    time.
+  </p>
+
+  <h2>5. Subscription, price and billing</h2>
+  <ul>
+    <li>The standard price is ${standard} per month in U.S. dollars.</li>
+    <li>
+      Our first {foundingSeats} paying customers pay a founding rate of ${founding} per month. That
+      price will not increase for as long as that subscription stays active.
+    </li>
+    <li>
+      Subscriptions renew monthly until cancelled. Payments are processed by our payment provider,
+      Creem, under its own terms. We do not receive or store your full card details.
+    </li>
+    <li>
+      If we ever change the standard price, we will email existing subscribers at least 30 days
+      before the change applies to them.
+    </li>
+  </ul>
+
+  <h2>6. Cancelling</h2>
+  <p>
+    You can cancel at any time by emailing <a href={contactHref}>{SITE.email}</a> or replying to any
+    digest. Cancellation stops future billing. Your digest continues until the end of the period you
+    have already paid for.
+  </p>
+
+  <h2>7. Refunds</h2>
+  <p>
+    If you are not satisfied during your first paid month, we will refund that month in full. See
+    the <a href={href('/refund/')}>Refund Policy</a> for details.
+  </p>
+
+  <h2>8. Acceptable use</h2>
+  <p>
+    The digest is for your own business. Please do not resell it, republish it in bulk, or share
+    your subscription with other companies. Forwarding an individual opportunity to a teaming
+    partner is fine.
+  </p>
+
+  <h2>9. Our content</h2>
+  <p>
+    The summaries, scores, suggestions and the design of the digest and website belong to
+    BidRadar. Notice titles, agency names and the notices themselves are public information.
+  </p>
+
+  <h2>10. Changes to the Service or these terms</h2>
+  <p>
+    We may update the Service or these terms. If a change materially affects paid subscribers, we
+    will tell you by email before it takes effect. Continuing to use the Service after that means
+    you accept the updated terms.
+  </p>
+
+  <h2>11. Limitation of liability</h2>
+  <p>
+    To the extent the law allows, BidRadar is not liable for any indirect or consequential loss,
+    including lost profits, lost contracts or bid costs, arising from use of the Service. Our total
+    liability for any claim is limited to the amount you paid us in the three months before the
+    claim.
+  </p>
+
+  <h2>12. Ending the Service</h2>
+  <p>
+    We may suspend accounts that misuse the Service. If we ever stop operating BidRadar, we will
+    tell subscribers by email and refund any unused paid period.
+  </p>
+
+  <h2>13. Contact</h2>
+  <p>
+    Questions about these terms: <a href={contactHref}>{SITE.email}</a>, or by mail to {SITE.address.line1},
+    {SITE.address.line2}, {SITE.address.line3}, {SITE.address.country}.
+  </p>
+</Page>

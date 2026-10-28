@@ -1,0 +1,108 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE, absolute, href } from '../lib/site';
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  jsonLd?: object[];
+  noindex?: boolean;
+}
+
+const { title, description, path, jsonLd = [], noindex = false } = Astro.props;
+const canonical = absolute(path);
+const fullTitle = path === '/' ? title : `${title} | ${SITE.name}`;
+
+const org = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: SITE.name,
+  url: absolute('/'),
+  email: SITE.email,
+  description:
+    'Independent email digest of new federal construction and facilities opportunities, summarized and scored for small contractors. Not affiliated with SAM.gov or any U.S. government agency.',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: SITE.address.line2,
+    addressLocality: 'Beijing',
+    postalCode: '100085',
+    addressCountry: 'CN',
+  },
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="icon" type="image/svg+xml" href={href('/favicon.svg')} />
+    <link rel="sitemap" href={href('/sitemap-index.xml')} />
+    <meta name="theme-color" content="#f4f5f7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0d1115" media="(prefers-color-scheme: dark)" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={absolute('/og.png')} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script is:inline type="application/ld+json" set:html={JSON.stringify([org, ...jsonLd])} />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      const els = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.classList.add('is-in');
+                io.unobserve(e.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.12 },
+        );
+        els.forEach((el) => io.observe(el));
+      } else {
+        els.forEach((el) => el.classList.add('is-in'));
+      }
+    </script>
+  </body>
+</html>
+
+<style>
+  .skip {
+    position: absolute;
+    left: 1rem;
+    top: -3rem;
+    z-index: 100;
+    padding: 0.5rem 0.75rem;
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: var(--r-sm);
+  }
+  .skip:focus {
+    top: 1rem;
+  }
+</style>

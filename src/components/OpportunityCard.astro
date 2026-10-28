@@ -1,0 +1,175 @@
+---
+import Icon from './Icon.astro';
+import { type Opportunity, setAsideLabel, shortDate } from '../data/sample';
+
+interface Props {
+  item: Opportunity;
+}
+const { item } = Astro.props;
+---
+
+<article class="opp">
+  <div class="score" aria-label={`Fit score ${item.score} out of 5`}>
+    <span class="mono num">{item.score}</span>
+    <span class="mono of">/5</span>
+    <span class="lbl">Fit</span>
+  </div>
+
+  <div class="body">
+    <h3 class="mono title">{item.title}</h3>
+    <ul class="meta" aria-label="Notice details">
+      <li><Icon name="buildings" size={16} />{item.agency}</li>
+      <li class={`tag tag-${item.setAside.toLowerCase()}`}>{setAsideLabel[item.setAside]}</li>
+      <li class="mono">Posted {shortDate(item.posted)}</li>
+      <li class="mono due">Due {shortDate(item.due)}</li>
+    </ul>
+
+    <dl class="notes">
+      <div>
+        <dt>Summary</dt>
+        <dd>{item.summary}</dd>
+      </div>
+      <div>
+        <dt>How to approach it</dt>
+        <dd>{item.advice}</dd>
+      </div>
+    </dl>
+
+    <a class="src" href={item.url} target="_blank" rel="noopener nofollow">
+      Read the full notice on SAM.gov <Icon name="arrow-up-right" size={15} />
+    </a>
+  </div>
+</article>
+
+<style>
+  .opp {
+    display: grid;
+    grid-template-columns: 4.5rem 1fr;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+  }
+  .score {
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: baseline;
+    justify-content: start;
+    align-content: start;
+    column-gap: 0.15rem;
+  }
+  .num {
+    font-size: 2.5rem;
+    line-height: 1;
+    font-weight: 500;
+    color: var(--accent-text);
+    letter-spacing: -0.04em;
+  }
+  .of {
+    color: var(--ink-3);
+    font-size: 0.9rem;
+  }
+  .lbl {
+    grid-column: 1 / -1;
+    margin-top: 0.35rem;
+    font-size: 0.75rem;
+    color: var(--ink-3);
+  }
+  .body {
+    min-width: 0;
+  }
+  .title {
+    font-size: 0.9375rem;
+    font-weight: 550;
+    letter-spacing: -0.01em;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+  }
+  .meta {
+    list-style: none;
+    padding: 0;
+    margin: 0.75rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+    font-size: 0.8125rem;
+    color: var(--ink-2);
+    align-items: center;
+  }
+  .meta li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .tag {
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--r-sm);
+    background: var(--surface-2);
+    color: var(--ink);
+    font-weight: 520;
+  }
+  .tag-sba,
+  .tag-sdvosbc {
+    background: var(--accent-soft);
+    color: var(--accent-text);
+  }
+  .due {
+    color: var(--ink);
+    font-weight: 560;
+  }
+  .notes {
+    margin: 1.25rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem 2rem;
+  }
+  dt {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 0.3rem;
+  }
+  dd {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+  .src {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-top: 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 520;
+    color: var(--accent-text);
+    text-decoration: none;
+  }
+  .src:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  @media (max-width: 680px) {
+    .opp {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+      padding: 1.25rem;
+    }
+    .score {
+      grid-template-columns: auto auto auto;
+      align-items: baseline;
+      column-gap: 0.25rem;
+    }
+    .num {
+      font-size: 1.75rem;
+    }
+    .lbl {
+      grid-column: auto;
+      margin: 0 0 0 0.4rem;
+    }
+    .notes {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

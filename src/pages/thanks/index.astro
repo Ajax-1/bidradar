@@ -1,0 +1,15 @@
+---
+import Page from '../../layouts/Page.astro';
+import { href } from '../../lib/site';
+---
+
+<Page
+  title="You are on the list"
+  description="Your free BidRadar sample is on its way."
+  path="/thanks/"
+  heading="You are on the list."
+  intro="Your free 3-day sample starts with the next weekday digest. Check your inbox, and add our address to your contacts so it does not land in spam."
+  noindex
+>
+  <p>While you wait, you can <a href={href('/sample/')}>browse a full sample digest</a> or <a href={href('/pricing/')}>read about pricing</a>.</p>
+</Page>

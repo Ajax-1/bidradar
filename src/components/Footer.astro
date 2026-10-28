@@ -1,0 +1,127 @@
+---
+import Logo from './Logo.astro';
+import { SITE, href, contactHref, year } from '../lib/site';
+---
+
+<footer class="site-footer">
+  <div class="wrap grid">
+    <div class="brand">
+      <Logo />
+      <p class="muted">
+        Daily email digest of new federal construction and facilities opportunities for small
+        contractors.
+      </p>
+      <p class="disclaimer">
+        BidRadar is an independent service. It is not affiliated with, endorsed by, or operated by
+        SAM.gov, the General Services Administration, or any U.S. government agency. Always confirm
+        details in the original notice before you bid.
+      </p>
+    </div>
+
+    <nav aria-label="Product">
+      <h2>Product</h2>
+      <a href={href('/sample/')}>Sample digest</a>
+      <a href={href('/pricing/')}>Pricing</a>
+      <a href={href('/#signup')}>Free 3-day sample</a>
+      <a href={href('/about/')}>About and contact</a>
+    </nav>
+
+    <nav aria-label="Legal">
+      <h2>Policies</h2>
+      <a href={href('/terms/')}>Terms of Service</a>
+      <a href={href('/privacy/')}>Privacy Policy</a>
+      <a href={href('/refund/')}>Refund Policy</a>
+    </nav>
+
+    <address>
+      <h2>Contact</h2>
+      <a href={contactHref}>{SITE.email}</a>
+      <span>{SITE.address.line1}</span>
+      <span>{SITE.address.line2}</span>
+      <span>{SITE.address.line3}</span>
+      <span>{SITE.address.country}</span>
+    </address>
+  </div>
+  <div class="wrap base">
+    <span>&copy; {year} BidRadar. All rights reserved.</span>
+    <span>Every email we send includes our postal address and a one-click unsubscribe link.</span>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--line);
+    background: var(--surface);
+    font-size: 0.9375rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
+    gap: 2.5rem;
+    padding-block: 3.5rem 2.5rem;
+  }
+  .brand {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    max-width: 38ch;
+  }
+  .disclaimer {
+    font-size: 0.8125rem;
+    color: var(--ink-3);
+    line-height: 1.55;
+  }
+  nav,
+  address {
+    display: grid;
+    gap: 0.55rem;
+    align-content: start;
+    font-style: normal;
+    color: var(--ink-2);
+  }
+  h2 {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    color: var(--ink);
+    margin-bottom: 0.35rem;
+  }
+  nav a,
+  address a {
+    text-decoration: none;
+    color: var(--ink-2);
+    width: fit-content;
+  }
+  nav a:hover,
+  address a:hover {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  address a {
+    word-break: break-all;
+  }
+  .base {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    padding-block: 1.25rem 2rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.8125rem;
+    color: var(--ink-3);
+  }
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .brand {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 520px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
