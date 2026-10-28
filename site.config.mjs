@@ -31,21 +31,23 @@ export const SITE = {
     foundingOpen: true,
   },
 
-  // PLACEHOLDER (Creem payment links). Paste the Creem checkout URLs here.
-  // While empty, the Subscribe buttons open an email to us instead.
+  // Creem checkout. While either value is empty, that Subscribe button
+  // opens an email to us instead.
   checkout: {
-    founding: '',
-    standard: '',
+    founding: 'https://www.creem.io/payment/prod_6CD83lhFbPd2HYqD0YDRLj', // $9/mo, first 10
+    standard: 'https://www.creem.io/payment/prod_ZjAvJFcgquPuyLJXB74MU', // $19/mo
   },
 
   // Sample signups are delivered by FormSubmit (https://formsubmit.co).
-  // No account and no fee. The endpoint is their AJAX URL for `email` above.
-  // The first submission emails that inbox a one-time "Activate Form" link.
-  // Until it is clicked, FormSubmit holds submissions (about 30 days) instead
-  // of delivering them. Clear `action` to fall back to a mailto: link.
+  // No account and no fee. The random alias keeps the inbox address out of
+  // the page source. FormSubmit treats that alias as its own form: the first
+  // submission emails `email` a one-time "Activate Form" link, and until it
+  // is clicked submissions are held (about 30 days) instead of delivered.
+  // The script posts to this AJAX URL; without JavaScript the form posts to
+  // the same alias without /ajax/. Clear `action` to fall back to mailto:.
   // Fields sent: email, trades, states, source.
   signupForm: {
-    action: 'https://formsubmit.co/ajax/bidradar@mail.grokbot.com',
+    action: 'https://formsubmit.co/ajax/b6ee89b8f45ff8a52486c58ade115e63',
     // Where to send people after a successful submit (path on this site).
     thanksPath: '/thanks/',
   },

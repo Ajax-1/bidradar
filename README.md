@@ -15,9 +15,9 @@ npm run build    # static output in dist/
 | What | Where | What to do |
 |---|---|---|
 | Domain | `site.config.mjs` → `url`, `basePath` | Set `url: 'https://yourdomain.com'`, `basePath: '/'`, add `public/CNAME` with the bare domain, and set the custom domain in the repo's Settings → Pages. |
-| Creem payment links | `site.config.mjs` → `checkout.founding`, `checkout.standard` | Paste the two Creem checkout URLs. Empty = Subscribe buttons open an email to us. |
+| Creem payment links | `site.config.mjs` → `checkout.founding`, `checkout.standard` | Founding ($9) and standard ($19) Creem checkout URLs. Empty = that Subscribe button opens an email to us. |
 | Founding plan on/off | `site.config.mjs` → `pricing.foundingOpen` | Set to `false` once the first 10 customers have subscribed. |
-| Email signup form | `site.config.mjs` → `signupForm.action` | FormSubmit AJAX endpoint `https://formsubmit.co/ajax/bidradar@mail.grokbot.com` (no account). The first submission emails that inbox a one-time Activate Form link; click it once. Fields sent: `email`, `trades`, `states`, `source`. Empty = form opens a pre-filled email to us. |
+| Email signup form | `site.config.mjs` → `signupForm.action` | FormSubmit AJAX alias `https://formsubmit.co/ajax/b6ee89b8f45ff8a52486c58ade115e63` (no account; the alias hides the inbox address). Fields sent: `email`, `trades`, `states`, `source`. Empty = form opens a pre-filled email to us. |
 | Logo | `src/components/Logo.astro`, `public/favicon.svg`, `public/og.png` | Replace the geometric placeholder mark. |
 
 ## Where content lives
